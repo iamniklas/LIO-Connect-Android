@@ -40,7 +40,6 @@ public class Client extends Thread {
 
             new Thread(sender).start();
             new Thread(receiver).start();
-
         } catch (IOException e) {
                 Log.e("clientdualantenna", "Connecting failed");
                 Log.e("clientdualantenna", e.getMessage());

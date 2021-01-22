@@ -9,7 +9,9 @@ public class NetworkManager {
 
     private static String username = "User";
 
-    private final String ip = "000raspberry.ddns.net";
+    //192.168.178.60 - 3333
+    //192.168.178.71 - 2400
+    private final String ip = "192.168.178.60";
     private final int port = 3333;
 
     NetworkCallbacks callbackObject = null;
