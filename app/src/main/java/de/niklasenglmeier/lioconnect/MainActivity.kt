@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallbacks
     lateinit var buttonWhite: ImageView
     lateinit var buttonBlack: ImageView
 
+    var modulo = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -53,30 +55,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallbacks
     override fun onClick(p0: View?) {
         when(p0!!.id) {
             R.id.buttonRed -> {
-                NetworkManager.instance.queueMessage("255 0 0")
+                NetworkManager.instance.queueMessage("$modulo 255 0 0")
             }
             R.id.buttonGreen -> {
-                NetworkManager.instance.queueMessage("0 255 0")
+                NetworkManager.instance.queueMessage("$modulo 0 255 0")
             }
             R.id.buttonBlue -> {
-                NetworkManager.instance.queueMessage("0 0 255")
+                NetworkManager.instance.queueMessage("$modulo 0 0 255")
             }
             R.id.buttonYellow -> {
-                NetworkManager.instance.queueMessage("128 128 0")
+                NetworkManager.instance.queueMessage("$modulo 128 128 0")
             }
             R.id.buttonMagenta -> {
-                NetworkManager.instance.queueMessage("128 0 128")
+                NetworkManager.instance.queueMessage("$modulo 128 0 128")
             }
             R.id.buttonTorquiose -> {
-                NetworkManager.instance.queueMessage("0 128 128")
+                NetworkManager.instance.queueMessage("$modulo 0 128 128")
             }
             R.id.buttonWhite -> {
-                NetworkManager.instance.queueMessage("128 128 128")
+                NetworkManager.instance.queueMessage("$modulo 128 128 128")
             }
             R.id.buttonBlack -> {
-                NetworkManager.instance.queueMessage("0 0 0")
+                NetworkManager.instance.queueMessage("$modulo 0 0 0")
             }
         }
+        modulo++
     }
 
     override fun onConnect() {
