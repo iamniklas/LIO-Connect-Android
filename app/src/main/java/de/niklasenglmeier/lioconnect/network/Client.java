@@ -10,12 +10,16 @@ public class Client extends Thread {
     public Sender sender;
     public Receiver receiver;
 
+    NetworkManager networkManager;
     NetworkCallbacks callbacks;
 
     private final String ip;
     private final int port;
 
-    public Client(NetworkCallbacks _callbackObject, String _ip, int _port) {
+    final ClientType clientType = ClientType.Java;
+
+    public Client(NetworkManager _mng, NetworkCallbacks _callbackObject, String _ip, int _port) {
+        networkManager = _mng;
         callbacks = _callbackObject;
         ip = _ip;
         port = _port;
@@ -33,13 +37,16 @@ public class Client extends Thread {
 
             socket = new Socket(ip, port);
 
-            callbacks.onConnect();
-
             sender = new Sender(socket.getOutputStream());
             receiver = new Receiver(socket, socket.getInputStream(), callbacks);
 
             new Thread(sender).start();
             new Thread(receiver).start();
+
+            networkManager.available = true;
+            callbacks.onConnect();
+
+            sender.outStream.writeByte(clientType.ordinal());
         } catch (IOException e) {
                 Log.e("clientdualantenna", "Connecting failed");
                 Log.e("clientdualantenna", e.getMessage());

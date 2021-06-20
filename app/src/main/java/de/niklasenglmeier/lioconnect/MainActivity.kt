@@ -2,24 +2,30 @@ package de.niklasenglmeier.lioconnect
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import com.google.gson.Gson
+import de.niklasenglmeier.lioconnect.lio.LEDDataBundle
+import de.niklasenglmeier.lioconnect.lio.ProcedureBundleFields
+import de.niklasenglmeier.lioconnect.lio.ProcedureTypes
+import de.niklasenglmeier.lioconnect.lio.colors.ColorRGB
 import de.niklasenglmeier.lioconnect.network.NetworkCallbacks
 import de.niklasenglmeier.lioconnect.network.NetworkManager
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallbacks {
 
-    lateinit var buttonRed: ImageView
-    lateinit var buttonGreen: ImageView
-    lateinit var buttonBlue: ImageView
-    lateinit var buttonYellow: ImageView
-    lateinit var buttonMagenta: ImageView
-    lateinit var buttonTorquiose: ImageView
-    lateinit var buttonWhite: ImageView
-    lateinit var buttonBlack: ImageView
+    private lateinit var buttonRed: ImageView
+    private lateinit var buttonGreen: ImageView
+    private lateinit var buttonBlue: ImageView
+    private lateinit var buttonYellow: ImageView
+    private lateinit var buttonMagenta: ImageView
+    private lateinit var buttonTorquiose: ImageView
+    private lateinit var buttonWhite: ImageView
+    private lateinit var buttonBlack: ImageView
 
-    var modulo = 1
+    private var modulo = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +58,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallbacks
         buttonBlack.setOnClickListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if(!NetworkManager.instance.available) return
+
+        val dataBundle = LEDDataBundle()
+        dataBundle[ProcedureBundleFields.COLOR_PRIMARY] = ColorRGB.black
+        dataBundle[ProcedureBundleFields.COLOR_SECONDARY] = ColorRGB(128, 128, 128)
+        dataBundle[ProcedureBundleFields.DURATION] = 0.25f
+        val data = Gson().toJson(dataBundle)
+        Log.e("lioconnect", data)
+        NetworkManager.instance.queueMessage("${ProcedureTypes.FadeToUniformColor}:${data}")
+    }
+
     override fun onClick(p0: View?) {
         when(p0!!.id) {
             R.id.buttonRed -> {
-                NetworkManager.instance.queueMessage("$modulo 255 0 0")
+                onResume()
+                //NetworkManager.instance.queueMessage("$modulo 255 0 0")
             }
             R.id.buttonGreen -> {
                 NetworkManager.instance.queueMessage("$modulo 0 255 0")
@@ -85,6 +106,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallbacks
     override fun onConnect() {
         runOnUiThread{
             Toast.makeText(applicationContext, "Connected", Toast.LENGTH_SHORT).show()
+            onResume()
         }
     }
 

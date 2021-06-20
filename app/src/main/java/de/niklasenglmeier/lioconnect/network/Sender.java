@@ -33,36 +33,8 @@ public class Sender implements Runnable {
         }
     }
 
-    synchronized void sendByte(byte _byte) {
-        try {
-            outStream.writeByte(_byte);
-
-            outStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    synchronized void sendBinary(String _message) {
-        try {
-            byte messageLength = (byte) _message.length();
-            byte[] msgBinary = _message.getBytes();
-
-            //outStream.writeByte(messageLength);
-
-            for (int i = 0; i < messageLength; i++) {
-                outStream.writeByte(msgBinary[i]);
-            }
-
-            outStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public synchronized void run() {
-        sendByte((byte) 3);
         while (true) {
             if(!resourceBlocked) {
                 while (messageBuffer.size() > 0) {

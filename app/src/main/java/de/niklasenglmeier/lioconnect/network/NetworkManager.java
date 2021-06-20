@@ -3,21 +3,21 @@ package de.niklasenglmeier.lioconnect.network;
 public class NetworkManager {
     public static NetworkManager instance = new NetworkManager();
 
+    public boolean available = false;
+
     private Thread clientThread = null;
 
     public Client client = null;
 
-    private static String username = "User";
-
-    //192.168.178.60 - 3333
-    //192.168.178.71 - 2400
-    private final String ip = "192.168.178.60";
-    private final int port = 3333;
+    private static final String username = "User";
 
     NetworkCallbacks callbackObject = null;
 
     public NetworkManager() {
-        client = new Client(callbackObject, ip, port);
+        String ip = "000raspberry.ddns.net";
+        int port = 3333;
+
+        client = new Client(this, callbackObject, ip, port);
 
         clientThread = new Thread(client);
         clientThread.start();

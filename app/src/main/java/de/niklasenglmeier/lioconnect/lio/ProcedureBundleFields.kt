@@ -1,0 +1,8 @@
+package de.niklasenglmeier.lioconnect.lio
+
+enum class ProcedureBundleFields {
+    COLOR_PRIMARY, COLOR_SECONDARY, COLOR_TERTIARY,
+    STRIP, CALLBACK,
+    MODULO, INTERPOLATION,
+    BPM, REPETITIONS, SPEED, DURATION, PATH, SUB_BUNDLE, IS_SUB_PROCEDURE
+}
